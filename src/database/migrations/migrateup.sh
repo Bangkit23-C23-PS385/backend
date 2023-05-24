@@ -1,0 +1,1 @@
+migrate -path ./ -database "postgresql://webuser:#cap5ton3itb@capstonedb.klola.app:5432/capstone_a" -verbose up
