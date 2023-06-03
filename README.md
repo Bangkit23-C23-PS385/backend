@@ -1,10 +1,11 @@
 # Backend System
 
 ## Try Locally
-1. Clone this repo
-2. cd ./backend
-3. go mod tidy
-4. go run src/main.go
+1. Download Go [here](https://go.dev/dl/)
+2. Clone this repo
+3. cd ./backend
+4. go mod tidy
+5. go run src/main.go
 
 ## API Documentation
 After running the app, go to this web:

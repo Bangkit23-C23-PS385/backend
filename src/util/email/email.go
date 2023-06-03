@@ -17,8 +17,6 @@ func LoadTemplate(templateType string, params map[string]interface{}) (loadedTem
 	var tmpl *template.Template
 	if templateType == string(constant.Register) {
 		tmpl, err = template.New("register-html").Parse(Register())
-	} else if templateType == string(constant.VerifySuccess) {
-		tmpl, err = template.New("verifySuccess-html").Parse(VerifySuccess())
 	}
 	if err != nil {
 		err = errors.Wrap(err, "template: parse html file")

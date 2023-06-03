@@ -6,14 +6,15 @@ import (
 
 type Claims struct {
 	jwt.RegisteredClaims
-	UserID    string `json:"id"`
-	UserName  string `json:"name"`
-	UserEmail string `json:"email"`
+	UserID       string `json:"id"`
+	UserName     string `json:"name"`
+	UserEmail    string `json:"email"`
+	UserUsername string `json:"username"`
 }
 
 type LoginRequest struct {
-	Email    string `json:"email" validate:"required"`
-	Password string `json:"password" validate:"required"`
+	Identifier string `json:"identifier" validate:"required"`
+	Password   string `json:"password" validate:"required"`
 }
 
 type RegisterRequest struct {
@@ -27,8 +28,8 @@ type RegisterRequest struct {
 }
 
 type VerifyRequest struct {
-	Email string `form:"email" validate:"required"`
-	Token string `form:"token" validate:"required"`
+	Username string `form:"username" validate:"required"`
+	Token    string `form:"token" validate:"required"`
 }
 
 type ResendRequest struct {

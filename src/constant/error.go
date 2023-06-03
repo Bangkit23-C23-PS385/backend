@@ -19,6 +19,7 @@ var (
 	ErrUsernameUnallowed = errors.New("can only use letters, numbers, underscores, dashes")
 	ErrUsernamePrefix    = errors.New("must start with a letter")
 	ErrUsernameSuffix    = errors.New("cannot end with dash, or underscore")
+	ErrUsernameTaken     = errors.New("username already taken")
 	ErrPasswordLength    = fmt.Errorf("must be %d to %d characters long", MinPasswordLength, MaxPasswordLength)
 	ErrPasswordUnallowed = errors.New("cannot contain unallowed characters")
 	ErrPasswordWeak      = errors.New("must contain letter and number")

@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"ta/backend/src/constant"
@@ -53,14 +52,28 @@ func (ctrl Controller) Login(ctx *gin.Context) {
 		return
 	}
 
-	err = helper.SanitizeEmail(req.Email)
-	if errors.Is(err, constant.ErrEmailLength) || errors.Is(err, constant.ErrEmailInvalid) {
-		log.Println(err)
-		helper.JSONResponse(ctx, http.StatusBadRequest, errors.Cause(err).Error(), nil)
-		return
-	} else if err != nil {
-		log.Println(err)
-		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
+	if helper.IsIdentifierEmail(req.Identifier) {
+		err = helper.SanitizeEmail(req.Identifier)
+		if errors.Is(err, constant.ErrEmailLength) || errors.Is(err, constant.ErrEmailInvalid) {
+			log.Println(err)
+			helper.JSONResponse(ctx, http.StatusBadRequest, errors.Cause(err).Error(), nil)
+			return
+		} else if err != nil {
+			log.Println(err)
+			helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
+		}
+	} else {
+		err = helper.SanitizeUsername(req.Identifier)
+		if errors.Is(err, constant.ErrUsernameLength) || errors.Is(err, constant.ErrUsernameUnallowed) ||
+			errors.Is(err, constant.ErrUsernamePrefix) || errors.Is(err, constant.ErrUsernameSuffix) {
+			log.Println(err)
+			helper.JSONResponse(ctx, http.StatusBadRequest, errors.Cause(err).Error(), nil)
+			return
+		} else if err != nil {
+			log.Println(err)
+			helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
+			return
+		}
 	}
 
 	loginResponse, err := ctrl.svc.Login(req)
@@ -222,8 +235,9 @@ func (ctrl Controller) VerifyEmail(ctx *gin.Context) {
 		log.Println(err)
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	} else {
-		location := fmt.Sprintf("%v", constant.RedirectURL)
-		ctx.Redirect(http.StatusFound, location)
+		// location := fmt.Sprintf("%v", constant.RedirectURL)
+		// ctx.Redirect(http.StatusFound, location)
+		helper.JSONResponse(ctx, http.StatusOK, "Verifikasi berhasil. Silakan login ke aplikasi", nil)
 	}
 }
 

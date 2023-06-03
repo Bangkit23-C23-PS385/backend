@@ -9,13 +9,11 @@ import (
 
 type Repository struct {
 	master *gorm.DB
-	slave  *gorm.DB
 }
 
 func NewRepository(db db.DB) *Repository {
 	return &Repository{
 		master: db.Master,
-		slave:  db.Slave,
 	}
 }
 
@@ -27,7 +25,7 @@ type Repositorier interface {
 }
 
 func (repo Repository) GetByEmail(email string) (verifEntity dbVerification.Verification, err error) {
-	err = repo.slave.
+	err = repo.master.
 		Where("email = ?", email).
 		Take(&verifEntity).Error
 

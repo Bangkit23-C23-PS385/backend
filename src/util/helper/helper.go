@@ -58,6 +58,14 @@ func JSONResponseGetAll(ctx *gin.Context, code int, msg string, paginationInfo P
 	ctx.JSON(code, responseStruct)
 }
 
+func IsIdentifierEmail(identifier string) bool {
+	if strings.Contains(identifier, "@") {
+		return true
+	}
+
+	return false
+}
+
 func SanitizeEmail(email string) (err error) {
 	email = strings.ToLower(email)
 	if len(email) > constant.MaxEmailLength {

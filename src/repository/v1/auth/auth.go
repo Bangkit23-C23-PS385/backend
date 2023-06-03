@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"ta/backend/src/constant"
 	db "ta/backend/src/database"
 	dbUser "ta/backend/src/entity/v1/db/user"
 	httpAuth "ta/backend/src/entity/v1/http/auth"
@@ -11,13 +10,11 @@ import (
 
 type Repository struct {
 	master *gorm.DB
-	slave  *gorm.DB
 }
 
 func NewRepository(db db.DB) *Repository {
 	return &Repository{
 		master: db.Master,
-		slave:  db.Slave,
 	}
 }
 
@@ -25,13 +22,14 @@ type Repositorier interface {
 	GetUsers() (entities []dbUser.User, err error)
 	GetUserByIDs(ids []int) (entities []dbUser.User, err error)
 	GetUserByEmail(email string) (user dbUser.User, err error)
+	GetUserByUsername(username string) (user dbUser.User, err error)
 	Insert(req httpAuth.RegisterRequest) (err error)
 	Update(userEntity dbUser.User) (err error)
 	Delete(id int) (err error)
 }
 
 func (repo Repository) GetUsers() (entities []dbUser.User, err error) {
-	err = repo.slave.
+	err = repo.master.
 		Order("updated_at desc").
 		Find(&entities).Error
 
@@ -39,7 +37,7 @@ func (repo Repository) GetUsers() (entities []dbUser.User, err error) {
 }
 
 func (repo Repository) GetUserByIDs(ids []int) (entities []dbUser.User, err error) {
-	err = repo.slave.
+	err = repo.master.
 		Where("id in (?)", ids).
 		Find(&entities).Error
 
@@ -47,8 +45,16 @@ func (repo Repository) GetUserByIDs(ids []int) (entities []dbUser.User, err erro
 }
 
 func (repo Repository) GetUserByEmail(email string) (user dbUser.User, err error) {
-	err = repo.slave.
+	err = repo.master.
 		Where("email = ?", email).
+		Take(&user).Error
+
+	return
+}
+
+func (repo Repository) GetUserByUsername(username string) (user dbUser.User, err error) {
+	err = repo.master.
+		Where("username = ?", username).
 		Take(&user).Error
 
 	return
@@ -56,10 +62,12 @@ func (repo Repository) GetUserByEmail(email string) (user dbUser.User, err error
 
 func (repo Repository) Insert(req httpAuth.RegisterRequest) (err error) {
 	userEntity := dbUser.User{
-		Name:       req.Name,
-		Email:      req.Email,
-		IsVerified: false,
-		Role:       constant.Roles(req.Role),
+		Name:         req.Name,
+		Username:     req.Username,
+		Password:     req.Password,
+		PasswordSalt: req.PasswordSalt,
+		Email:        req.Email,
+		IsVerified:   false,
 	}
 	query := repo.master.Model(&dbUser.User{}).Begin().Create(&userEntity)
 	err = query.Error

@@ -2,7 +2,6 @@ package router
 
 import (
 	"os"
-	"sync"
 	"ta/backend/docs"
 	v1 "ta/backend/src/controller/v1"
 	"ta/backend/src/database"
@@ -26,36 +25,23 @@ func SetupRouter() *gin.Engine {
 
 func LoadRouter(router *gin.Engine) {
 	initSwagger(router)
-
-	wg := &sync.WaitGroup{}
-
-	wg.Add(2)
-	go initMaster(wg)
-	go initSlave(wg)
-	wg.Wait()
+	initMaster()
 
 	// add router
 	v1.RouteLoader(router, database.DB{
 		Master: master,
-		Slave:  slave,
 	})
 }
 
-func initMaster(wg *sync.WaitGroup) {
-	defer wg.Done()
+func initMaster() {
 	master = database.DBMaster()
-}
-
-func initSlave(wg *sync.WaitGroup) {
-	defer wg.Done()
-	slave = database.DBSlave()
 }
 
 func initSwagger(router *gin.Engine) {
 	_ = godotenv.Load()
 
-	docs.SwaggerInfo.Title = "AIVue API"
-	docs.SwaggerInfo.Description = "AIVue API Documentation"
+	docs.SwaggerInfo.Title = "Medicure API"
+	docs.SwaggerInfo.Description = "Medicure API Documentation"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = os.Getenv("API_ORIGIN_URL")
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
