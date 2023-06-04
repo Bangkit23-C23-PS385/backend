@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/medicure-bangkit23/backend-build', '.']
+images:
+- 'gcr.io/medicure-bangkit23/backend-build'
