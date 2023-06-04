@@ -1,9 +1,9 @@
 package auth
 
 import (
-	db "ta/backend/src/database"
-	dbUser "ta/backend/src/entity/v1/db/user"
-	httpAuth "ta/backend/src/entity/v1/http/auth"
+	db "backend/src/database"
+	dbUser "backend/src/entity/v1/db/user"
+	httpAuth "backend/src/entity/v1/http/auth"
 
 	"gorm.io/gorm"
 )

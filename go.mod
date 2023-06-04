@@ -1,4 +1,4 @@
-module ta/backend
+module backend
 
 go 1.18
 

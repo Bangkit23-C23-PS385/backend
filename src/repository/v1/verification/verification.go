@@ -1,8 +1,8 @@
 package verification
 
 import (
-	db "ta/backend/src/database"
-	dbVerification "ta/backend/src/entity/v1/db/verification"
+	db "backend/src/database"
+	dbVerification "backend/src/entity/v1/db/verification"
 
 	"gorm.io/gorm"
 )
