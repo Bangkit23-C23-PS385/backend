@@ -1,12 +1,12 @@
 package auth
 
 import (
+	"backend/src/constant"
+	httpAuth "backend/src/entity/v1/http/auth"
+	authSvc "backend/src/service/v1/auth"
+	"backend/src/util/helper"
 	"log"
 	"net/http"
-	"ta/backend/src/constant"
-	httpAuth "ta/backend/src/entity/v1/http/auth"
-	authSvc "ta/backend/src/service/v1/auth"
-	"ta/backend/src/util/helper"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

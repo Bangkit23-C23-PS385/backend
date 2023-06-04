@@ -1,10 +1,10 @@
 package helper
 
 import (
+	"backend/src/constant"
+	httpAuth "backend/src/entity/v1/http/auth"
 	"os"
 	"strings"
-	"ta/backend/src/constant"
-	httpAuth "ta/backend/src/entity/v1/http/auth"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
