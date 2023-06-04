@@ -8,7 +8,10 @@ WORKDIR /backend
 COPY . .
 
 # Build the Go application
-RUN go build -o main /backend
+RUN go mod tidy
+RUN go build -o /backend/src/main /backend/src/
+
+EXPOSE 9000
 
 # Set the entry point for the container
-CMD ["/app/main"]
+CMD ["/backend/src/main"]

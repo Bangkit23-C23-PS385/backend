@@ -1,9 +1,9 @@
 package verification
 
 import (
-	"ta/backend/src/constant"
-	dbVerification "ta/backend/src/entity/v1/db/verification"
-	verifRepo "ta/backend/src/repository/v1/verification"
+	"backend/src/constant"
+	dbVerification "backend/src/entity/v1/db/verification"
+	verifRepo "backend/src/repository/v1/verification"
 
 	"github.com/pkg/errors"
 	"gorm.io/gorm"

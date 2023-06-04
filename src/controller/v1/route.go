@@ -1,12 +1,12 @@
 package v1
 
 import (
-	authCtrl "ta/backend/src/controller/v1/auth"
-	"ta/backend/src/database"
-	authRepo "ta/backend/src/repository/v1/auth"
-	verifRepo "ta/backend/src/repository/v1/verification"
-	authSvc "ta/backend/src/service/v1/auth"
-	verifSvc "ta/backend/src/service/v1/verification"
+	authCtrl "backend/src/controller/v1/auth"
+	"backend/src/database"
+	authRepo "backend/src/repository/v1/auth"
+	verifRepo "backend/src/repository/v1/verification"
+	authSvc "backend/src/service/v1/auth"
+	verifSvc "backend/src/service/v1/verification"
 
 	"github.com/gin-gonic/gin"
 )
