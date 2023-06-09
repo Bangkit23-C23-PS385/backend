@@ -11,6 +11,7 @@ import (
 type Roles string
 type TemplateType string
 type TemplateSubject string
+type GenderType string
 
 const (
 	Admin      Roles = "admin"
@@ -21,6 +22,9 @@ const (
 
 	VerifyEmail         TemplateSubject = "Verifikasi Email Anda - AIVue"
 	RegistrationSuccess TemplateSubject = "Verifikasi Email Berhasil! - AIVue"
+
+	Lakilaki  GenderType = "LAKILAKI"
+	Perempuan GenderType = "PEREMPUAN"
 )
 
 var (
