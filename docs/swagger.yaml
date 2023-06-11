@@ -112,8 +112,7 @@ paths:
       - Auth
   /v1/predict:
     post:
-      description: Submit candidate rating with its interview result if it's their
-        last interview
+      description: Submit Data
       parameters:
       - description: Bearer Token
         in: header
@@ -143,7 +142,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Submit Rating
+      summary: Submit Data
       tags:
       - Predict
   /v1/register:
@@ -206,6 +205,31 @@ paths:
       summary: Resend Email
       tags:
       - Auth
+  /v1/symptoms:
+    get:
+      description: Get Symptoms
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Symptoms
+      tags:
+      - Predict
   /v1/verify:
     get:
       description: Verify Email
