@@ -5,6 +5,7 @@ import (
 	predictCtrl "backend/src/controller/v1/predict"
 	"backend/src/database"
 	authRepo "backend/src/repository/v1/auth"
+	predictRepo "backend/src/repository/v1/predict"
 	verifRepo "backend/src/repository/v1/verification"
 	authSvc "backend/src/service/v1/auth"
 	predictSvc "backend/src/service/v1/predict"
@@ -14,10 +15,11 @@ import (
 )
 
 func RouteLoader(router *gin.Engine, db database.DB) {
+	predictRepository := predictRepo.NewRepository(db)
 	verifRepository := verifRepo.NewRepository(db)
 	authRepository := authRepo.NewRepository(db)
 
-	predictService := predictSvc.NewService()
+	predictService := predictSvc.NewService(predictRepository)
 	verifService := verifSvc.NewService(verifRepository)
 	authService := authSvc.NewService(verifService, authRepository)
 
@@ -42,4 +44,8 @@ func predict(router *gin.RouterGroup, handler *predictCtrl.Controller) {
 	predict := router.Group("predict")
 
 	predict.POST("/", handler.SubmitData)
+
+	symptoms := router.Group("symptoms")
+
+	symptoms.GET("", handler.GetSymptoms)
 }

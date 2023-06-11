@@ -90,11 +90,11 @@
         },
         "/v1/predict": {
             "post": {
-                "description": "Submit candidate rating with its interview result if it's their last interview",
+                "description": "Submit Data",
                 "tags": [
                     "Predict"
                 ],
-                "summary": "Submit Rating",
+                "summary": "Submit Data",
                 "parameters": [
                     {
                         "type": "string",
@@ -220,6 +220,44 @@
                     },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/symptoms": {
+            "get": {
+                "description": "Get Symptoms",
+                "tags": [
+                    "Predict"
+                ],
+                "summary": "Get Symptoms",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "type": "string"
                         }

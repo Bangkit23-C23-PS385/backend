@@ -54,5 +54,8 @@ var (
 	MinPage      = 1
 	MaxLimit     = 20
 
+	MinSymptoms = 3
+	MaxSymptoms = 7
+
 	TimeLocation = "Asia/Jakarta"
 )
