@@ -10,6 +10,7 @@ import (
 
 type Profile struct {
 	gorm.Model
+	UserId      string              `gorm:"column:userId"`
 	Name        string              `gorm:"column:name"`
 	Gender      constant.GenderType `gorm:"column:gender"`
 	DateOfBirth time.Time           `gorm:"column:dateOfBirth"`
