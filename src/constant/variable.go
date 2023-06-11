@@ -8,19 +8,15 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type Roles string
 type TemplateType string
 type TemplateSubject string
 
 const (
-	Admin      Roles = "admin"
-	SuperAdmin Roles = "super admin"
-
 	Register      TemplateType = "register"
 	VerifySuccess TemplateType = "verify success"
 
-	VerifyEmail         TemplateSubject = "Verifikasi Email Anda - AIVue"
-	RegistrationSuccess TemplateSubject = "Verifikasi Email Berhasil! - AIVue"
+	VerifyEmail         TemplateSubject = "Verifikasi Email Anda - Medicare"
+	RegistrationSuccess TemplateSubject = "Verifikasi Email Berhasil! - Medicare"
 )
 
 var (
@@ -36,6 +32,10 @@ var (
 	WasabiBucketName     = os.Getenv("WASABI_BUCKET_NAME")
 	WasabiAccessKey      = os.Getenv("WASABI_ACCESS_KEY")
 	WasabiSecretKey      = os.Getenv("WASABI_SECRET_KEY")
+
+	GCPProjectID       = os.Getenv("GCP_PROJECT_ID")
+	GCPTopicPredict    = os.Getenv("GCP_PUBSUB_TOPIC_PREDICT")
+	GCPTopicSubmitData = os.Getenv("GCP_PUBSUB_TOPIC_SUBMIT_DATA")
 
 	AccessTokenInterval, _ = strconv.Atoi(os.Getenv("ACCESS_TOKEN_INTERVAL"))
 	AccessTokenDuration    = time.Duration(AccessTokenInterval) * time.Second
@@ -56,12 +56,3 @@ var (
 
 	TimeLocation = "Asia/Jakarta"
 )
-
-func (r Roles) String() string {
-	if r == "admin" ||
-		r == "super admin" ||
-		r == "candidate" {
-		return string(r)
-	}
-	return ""
-}

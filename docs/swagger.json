@@ -88,6 +88,59 @@
                 }
             }
         },
+        "/v1/predict": {
+            "post": {
+                "description": "Submit candidate rating with its interview result if it's their last interview",
+                "tags": [
+                    "Predict"
+                ],
+                "summary": "Submit Rating",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Payload",
+                        "name": "Payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/predict.PredictSymptoms"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/register": {
             "post": {
                 "description": "Register",
@@ -299,6 +352,17 @@
             "properties": {
                 "email": {
                     "type": "string"
+                }
+            }
+        },
+        "predict.PredictSymptoms": {
+            "type": "object",
+            "properties": {
+                "symptoms": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }
