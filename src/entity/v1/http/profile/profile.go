@@ -9,7 +9,7 @@ type GetDeleteCommonRequest struct {
 	UserID string `json:"id"`
 }
 
-type CreateUpdateCommonRequest struct {
+type CommonRequest struct {
 	UserID      string              `json:"id"`
 	Name        string              `json:"column:name"`
 	Gender      constant.GenderType `json:"column:gender"`
