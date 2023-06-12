@@ -15,7 +15,7 @@ type Profile struct {
 	Gender      constant.GenderType `gorm:"column:gender"`
 	DateOfBirth time.Time           `gorm:"column:dateOfBirth"`
 	Height      int                 `gorm:"column:height"`
-	Weight      string              `gorm:"column:weight"`
+	Weight      int                 `gorm:"column:weight"`
 }
 
 func (Profile) TableName() string {
