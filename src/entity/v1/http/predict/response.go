@@ -9,3 +9,7 @@ type Symptom struct {
 	SymptomEN string `json:"symptom_en"`
 	SymptomID string `json:"symptom_id"`
 }
+
+type DiseaseResponse struct {
+	Disease string `json:"disease"`
+}

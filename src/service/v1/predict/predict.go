@@ -24,7 +24,7 @@ func NewService(repo predictRepo.Repositorier) *Service {
 
 type Servicer interface {
 	GetSymptoms() (resps httpPredict.SymptomsResponse, err error)
-	SubmitData(req httpPredict.PredictSymptoms) (err error)
+	SubmitData(req httpPredict.PredictSymptoms) (resp httpPredict.DiseaseResponse, err error)
 }
 
 func (svc Service) GetSymptoms() (resps httpPredict.SymptomsResponse, err error) {
@@ -48,7 +48,7 @@ func (svc Service) GetSymptoms() (resps httpPredict.SymptomsResponse, err error)
 	return
 }
 
-func (svc Service) SubmitData(req httpPredict.PredictSymptoms) (err error) {
+func (svc Service) SubmitData(req httpPredict.PredictSymptoms) (resp httpPredict.DiseaseResponse, err error) {
 	data, _ := json.Marshal(req)
 
 	ctx := context.Background()
@@ -68,6 +68,16 @@ func (svc Service) SubmitData(req httpPredict.PredictSymptoms) (err error) {
 		return
 	}
 	fmt.Printf("Published message with ID: %s\n", id)
+	fmt.Println("Waiting response from model...")
+
+	subName := constant.GCPSubscriptionPredict
+	subscription := client.Subscription(subName)
+	_ = subscription.Receive(ctx, func(ctx context.Context, msg *pubsub.Message) {
+		fmt.Printf("Received message: %s\n", string(msg.Data))
+		_ = json.Unmarshal(msg.Data, &resp)
+		msg.Ack()
+		client.Close()
+	})
 
 	return
 }

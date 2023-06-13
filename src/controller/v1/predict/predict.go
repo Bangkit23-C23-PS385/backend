@@ -92,11 +92,11 @@ func (ctrl Controller) SubmitData(ctx *gin.Context) {
 		return
 	}
 
-	err = ctrl.svc.SubmitData(req)
+	resp, err := ctrl.svc.SubmitData(req)
 	if err != nil {
 		log.Println(err)
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	} else {
-		helper.JSONResponse(ctx, http.StatusOK, "", nil)
+		helper.JSONResponse(ctx, http.StatusOK, "", resp)
 	}
 }

@@ -33,9 +33,9 @@ var (
 	WasabiAccessKey      = os.Getenv("WASABI_ACCESS_KEY")
 	WasabiSecretKey      = os.Getenv("WASABI_SECRET_KEY")
 
-	GCPProjectID       = os.Getenv("GCP_PROJECT_ID")
-	GCPTopicPredict    = os.Getenv("GCP_PUBSUB_TOPIC_PREDICT")
-	GCPTopicSubmitData = os.Getenv("GCP_PUBSUB_TOPIC_SUBMIT_DATA")
+	GCPProjectID           = os.Getenv("GCP_PROJECT_ID")
+	GCPTopicSubmitData     = os.Getenv("GCP_PUBSUB_TOPIC_SUBMIT_DATA")
+	GCPSubscriptionPredict = os.Getenv("GCP_PUBSUB_SUBSCRIPTION_PREDICT")
 
 	AccessTokenInterval, _ = strconv.Atoi(os.Getenv("ACCESS_TOKEN_INTERVAL"))
 	AccessTokenDuration    = time.Duration(AccessTokenInterval) * time.Second
