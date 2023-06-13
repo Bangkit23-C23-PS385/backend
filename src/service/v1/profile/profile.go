@@ -1,9 +1,12 @@
 package profile
 
 import (
-	"ta/backend/src/entity/v1/db/profile"
+	"backend/src/constant"
+	"backend/src/entity/v1/db/profile"
+	"time"
+
 	// dbProfile "ta/backend/src/entity/v1/db/profile"
-	profileRepo "ta/backend/src/repository/v1/profile"
+	profileRepo "backend/src/repository/v1/profile"
 
 	"github.com/pkg/errors"
 )
@@ -24,6 +27,7 @@ type Servicer interface {
 	CreateProfile(req profile.Profile) (*profile.Profile, error)
 	UpdateProfile(req profile.Profile) (*profile.Profile, error)
 	DeleteProfile(id string) (*profile.Profile, error)
+	ConvertStringToTime(dateString string) (time.Time, error)
 }
 
 // func (svc Service) ExtractToken(token string) (res profile.CommonRequest, err error) {
@@ -37,6 +41,9 @@ func (svc Service) GetProfile(id string) (*profile.Profile, error) {
 		err = errors.Wrap(err, "repo: get profile")
 		return nil, err
 	}
+	if result.CreatedAt.Equal(time.Time{}) {
+		return nil, nil
+	}
 
 	return &result, nil
 }
@@ -49,8 +56,7 @@ func (svc Service) CreateProfile(req profile.Profile) (*profile.Profile, error) 
 		return nil, err
 	}
 	if result != nil {
-		err = errors.Wrap(err, "service: profile already exist")
-		return nil, err
+		return nil, nil
 	}
 	newProfile := profile.Profile{
 		UserId:      req.UserId,
@@ -71,21 +77,44 @@ func (svc Service) CreateProfile(req profile.Profile) (*profile.Profile, error) 
 
 func (svc Service) UpdateProfile(req profile.Profile) (*profile.Profile, error) {
 	var err error
-	newProfile := profile.Profile{
-		UserId:      req.UserId,
-		Name:        req.Name,
-		Gender:      req.Gender,
-		DateOfBirth: req.DateOfBirth,
-		Height:      req.Height,
-		Weight:      req.Weight,
+	result, err := svc.GetProfile(req.UserId)
+	if err != nil {
+		err = errors.Wrap(err, "repo: get profile")
+		return nil, err
 	}
-	err = svc.repo.UpdateProfile(newProfile)
+	if result == nil {
+		return nil, nil
+	}
+	newProfile := result
+	if req.Name != "" {
+		newProfile.Name = req.Name
+	}
+	if !req.DateOfBirth.Equal(time.Time{}) {
+		newProfile.DateOfBirth = req.DateOfBirth
+	}
+
+	if req.Height != 0 {
+		newProfile.Height = req.Height
+	}
+	if req.Weight != 0 {
+		newProfile.Weight = req.Weight
+	}
+	if req.Gender != "" {
+		if req.Gender != constant.Lakilaki && req.Gender != constant.Perempuan {
+			err = errors.Wrap(err, "wrong gender value")
+			return nil, err
+		}
+		newProfile.Gender = req.Gender
+	}
+	newProfile.UpdatedAt = time.Now()
+
+	err = svc.repo.UpdateProfile(*newProfile)
 	if err != nil {
 		err = errors.Wrap(err, "repo: update profile")
 		return nil, err
 	}
 
-	return &newProfile, nil
+	return newProfile, nil
 }
 
 func (svc Service) DeleteProfile(id string) (*profile.Profile, error) {
@@ -105,5 +134,23 @@ func (svc Service) DeleteProfile(id string) (*profile.Profile, error) {
 		return nil, err
 	}
 
-	return &profile.Profile{UserId: id}, nil
+	return &profile.Profile{
+		UserId:      id,
+		Name:        result.Name,
+		Gender:      result.Gender,
+		DateOfBirth: result.DateOfBirth,
+		Height:      result.Height,
+		Weight:      result.Weight,
+		CreatedAt:   result.CreatedAt,
+		UpdatedAt:   result.UpdatedAt,
+	}, nil
+}
+
+func (svc Service) ConvertStringToTime(dateString string) (time.Time, error) {
+	layout := "2006-01-02" // Format for "YYYY-MM-DD"
+	t, err := time.Parse(layout, dateString)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return t, nil
 }
