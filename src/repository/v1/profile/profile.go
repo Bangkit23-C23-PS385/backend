@@ -1,8 +1,8 @@
 package profile
 
 import (
-	db "ta/backend/src/database"
-	dbProfile "ta/backend/src/entity/v1/db/profile"
+	db "backend/src/database"
+	dbProfile "backend/src/entity/v1/db/profile"
 
 	"gorm.io/gorm"
 )
@@ -19,7 +19,7 @@ func NewRepository(db db.DB) *Repository {
 
 type Repositorier interface {
 	CreateProfile(req dbProfile.Profile) (err error)
-	GetProfile(id string) (entities dbProfile.Profile, err error)
+	GetProfile(userid string) (entities dbProfile.Profile, err error)
 	UpdateProfile(req dbProfile.Profile) (err error)
 	DeleteProfile(id string) (err error)
 }
@@ -44,9 +44,9 @@ func (repo Repository) CreateProfile(req dbProfile.Profile) (err error) {
 	return
 }
 
-func (repo Repository) GetProfile(id string) (entities dbProfile.Profile, err error) {
+func (repo Repository) GetProfile(userid string) (entities dbProfile.Profile, err error) {
 	err = repo.master.
-		Where("userId in (?)", id).
+		Where("userid in (?)", userid).
 		Find(&entities).Error
 
 	return
