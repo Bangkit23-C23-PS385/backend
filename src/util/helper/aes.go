@@ -1,13 +1,13 @@
 package helper
 
 import (
+	"backend/src/constant"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
 	"io"
 	"os"
-	"ta/backend/src/constant"
 
 	"github.com/joho/godotenv"
 	"github.com/pkg/errors"

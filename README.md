@@ -9,8 +9,10 @@
 
 ## API Documentation
 After running the app, go to this web:
-[Swagger Docs](http://localhost:9000/swagger/index.html#/)
+[Swagger Docs Local](http://localhost:9000/swagger/index.html#/)
 
-Alternative link: http://localhost:9000/swagger/index.html#/
+[Swagger Docs Deployed](https://medicure-backend-qh7644hmya-as.a.run.app/swagger/index.html#/)
+
+Alternative link Deployed: https://medicure-backend-qh7644hmya-as.a.run.app/swagger/index.html#/
 
 > This project uses Go version 1.18

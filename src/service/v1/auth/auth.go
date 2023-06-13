@@ -1,16 +1,16 @@
 package auth
 
 import (
+	"backend/src/constant"
+	dbUser "backend/src/entity/v1/db/user"
+	httpAuth "backend/src/entity/v1/http/auth"
+	authRepo "backend/src/repository/v1/auth"
+	verifSvc "backend/src/service/v1/verification"
+	"backend/src/util/email"
+	"backend/src/util/helper"
 	"fmt"
 	"os"
 	"strconv"
-	"ta/backend/src/constant"
-	dbUser "ta/backend/src/entity/v1/db/user"
-	httpAuth "ta/backend/src/entity/v1/http/auth"
-	authRepo "ta/backend/src/repository/v1/auth"
-	verifSvc "ta/backend/src/service/v1/verification"
-	"ta/backend/src/util/email"
-	"ta/backend/src/util/helper"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"

@@ -8,15 +8,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type Roles string
 type TemplateType string
 type TemplateSubject string
 type GenderType string
 
 const (
-	Admin      Roles = "admin"
-	SuperAdmin Roles = "super admin"
-
 	Register      TemplateType = "register"
 	VerifySuccess TemplateType = "verify success"
 
@@ -41,6 +37,10 @@ var (
 	WasabiAccessKey      = os.Getenv("WASABI_ACCESS_KEY")
 	WasabiSecretKey      = os.Getenv("WASABI_SECRET_KEY")
 
+	GCPProjectID       = os.Getenv("GCP_PROJECT_ID")
+	GCPTopicPredict    = os.Getenv("GCP_PUBSUB_TOPIC_PREDICT")
+	GCPTopicSubmitData = os.Getenv("GCP_PUBSUB_TOPIC_SUBMIT_DATA")
+
 	AccessTokenInterval, _ = strconv.Atoi(os.Getenv("ACCESS_TOKEN_INTERVAL"))
 	AccessTokenDuration    = time.Duration(AccessTokenInterval) * time.Second
 
@@ -58,14 +58,8 @@ var (
 	MinPage      = 1
 	MaxLimit     = 20
 
+	MinSymptoms = 3
+	MaxSymptoms = 7
+
 	TimeLocation = "Asia/Jakarta"
 )
-
-func (r Roles) String() string {
-	if r == "admin" ||
-		r == "super admin" ||
-		r == "candidate" {
-		return string(r)
-	}
-	return ""
-}

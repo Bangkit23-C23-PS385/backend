@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"ta/backend/src/router"
+	"backend/src/router"
 
 	"github.com/joho/godotenv"
 )

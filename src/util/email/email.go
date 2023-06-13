@@ -1,12 +1,12 @@
 package email
 
 import (
+	"backend/src/constant"
 	"bytes"
 	"html/template"
 	"os"
 	"strconv"
 	"strings"
-	"ta/backend/src/constant"
 
 	"github.com/joho/godotenv"
 	"github.com/pkg/errors"

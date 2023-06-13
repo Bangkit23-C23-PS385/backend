@@ -1,11 +1,11 @@
 package router
 
 import (
+	"backend/docs"
+	v1 "backend/src/controller/v1"
+	"backend/src/database"
+	"backend/src/util/middleware"
 	"os"
-	"ta/backend/docs"
-	v1 "ta/backend/src/controller/v1"
-	"ta/backend/src/database"
-	"ta/backend/src/util/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
