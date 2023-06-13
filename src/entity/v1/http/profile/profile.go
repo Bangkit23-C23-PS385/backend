@@ -1,21 +1,25 @@
 package profile
 
 import (
-	"ta/backend/src/constant"
-	"time"
+	"backend/src/constant"
 )
 
 type GetDeleteCommonRequest struct {
 	UserID string `json:"id"`
 }
 
-type CommonRequest struct {
-	UserID      string              `json:"id"`
-	Name        string              `json:"column:name"`
-	Gender      constant.GenderType `json:"column:gender"`
-	DateOfBirth time.Time           `json:"column:dateOfBirth"`
-	Height      int                 `json:"column:height"`
-	Weight      string              `json:"column:weight"`
+type CreateRequest struct {
+	Gender      constant.GenderType `json:"gender" example:"LAKILAKI/PEREMPUAN"`
+	DateOfBirth string              `json:"dateOfBirth" example:"YYYY-MM-DD"`
+	Height      int                 `json:"height"`
+	Weight      int                 `json:"weight"`
+}
+type UpdateRequest struct {
+	Name        string              `json:"name"`
+	Gender      constant.GenderType `json:"gender" example:""`
+	DateOfBirth string              `json:"dateOfBirth" example:""`
+	Height      int                 `json:"height"`
+	Weight      int                 `json:"weight"`
 }
 
 // making type Code for inside CommonResponse
