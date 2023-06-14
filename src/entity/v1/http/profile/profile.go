@@ -16,8 +16,8 @@ type CreateRequest struct {
 }
 type UpdateRequest struct {
 	Name        string              `json:"name"`
-	Gender      constant.GenderType `json:"gender" example:""`
-	DateOfBirth string              `json:"dateOfBirth" example:""`
+	Gender      constant.GenderType `json:"gender" example:"LAKILAKI/PEREMPUAN"`
+	DateOfBirth string              `json:"dateOfBirth" example:"YYYY-MM-DD"`
 	Height      int                 `json:"height"`
 	Weight      int                 `json:"weight"`
 }
