@@ -51,18 +51,18 @@ func (svc Service) GetSymptoms() (resps httpPredict.SymptomsResponse, err error)
 func (svc Service) SubmitData(req httpPredict.PredictSymptoms) (resp httpPredict.DiseaseResponse, err error) {
 	data, _ := json.Marshal(req)
 
-	ctx := context.Background()
-	client, err := pubsub.NewClient(ctx, constant.GCPProjectID)
+	cctx, cancel := context.WithCancel(context.Background())
+	client, err := pubsub.NewClient(cctx, constant.GCPProjectID)
 	if err != nil {
 		err = errors.Wrap(err, "error creating pubsub client")
 		return
 	}
 
 	topic := client.Topic(constant.GCPTopicSubmitData)
-	result := topic.Publish(ctx, &pubsub.Message{
+	result := topic.Publish(cctx, &pubsub.Message{
 		Data: data,
 	})
-	id, err := result.Get(ctx)
+	id, err := result.Get(cctx)
 	if err != nil {
 		err = errors.Wrap(err, "pubsub: failed to get result")
 		return
@@ -72,11 +72,11 @@ func (svc Service) SubmitData(req httpPredict.PredictSymptoms) (resp httpPredict
 
 	subName := constant.GCPSubscriptionPredict
 	subscription := client.Subscription(subName)
-	_ = subscription.Receive(ctx, func(ctx context.Context, msg *pubsub.Message) {
+	_ = subscription.Receive(cctx, func(ctx context.Context, msg *pubsub.Message) {
+		msg.Ack()
 		fmt.Printf("Received message: %s\n", string(msg.Data))
 		_ = json.Unmarshal(msg.Data, &resp)
-		msg.Ack()
-		client.Close()
+		cancel()
 	})
 
 	return
