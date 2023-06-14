@@ -52,6 +52,32 @@ definitions:
           type: string
         type: array
     type: object
+  profile.CreateRequest:
+    properties:
+      dateOfBirth:
+        example: YYYY-MM-DD
+        type: string
+      gender:
+        example: LAKILAKI/PEREMPUAN
+        type: string
+      height:
+        type: integer
+      weight:
+        type: integer
+    type: object
+  profile.UpdateRequest:
+    properties:
+      dateOfBirth:
+        type: string
+      gender:
+        type: string
+      height:
+        type: integer
+      name:
+        type: string
+      weight:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
@@ -145,6 +171,115 @@ paths:
       summary: Submit Data
       tags:
       - Predict
+  /v1/profile:
+    delete:
+      description: Delete Profile
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete Profile
+      tags:
+      - Profile
+    get:
+      description: Get Profile
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Profile
+      tags:
+      - Profile
+    post:
+      description: Create Profile
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Profile request body
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/profile.CreateRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create Profile
+      tags:
+      - Profile
+    put:
+      description: Update Profile
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Profile request body
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/profile.UpdateRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update Profile
+      tags:
+      - Profile
   /v1/register:
     post:
       description: Register

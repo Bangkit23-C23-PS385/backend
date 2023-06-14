@@ -10,13 +10,17 @@ import (
 
 type TemplateType string
 type TemplateSubject string
+type GenderType string
 
 const (
 	Register      TemplateType = "register"
 	VerifySuccess TemplateType = "verify success"
 
-	VerifyEmail         TemplateSubject = "Verifikasi Email Anda - Medicare"
-	RegistrationSuccess TemplateSubject = "Verifikasi Email Berhasil! - Medicare"
+	VerifyEmail         TemplateSubject = "Verifikasi Email Anda - AIVue"
+	RegistrationSuccess TemplateSubject = "Verifikasi Email Berhasil! - AIVue"
+
+	Lakilaki  GenderType = "LAKILAKI"
+	Perempuan GenderType = "PEREMPUAN"
 )
 
 var (
