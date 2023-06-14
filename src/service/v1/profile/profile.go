@@ -57,22 +57,33 @@ func (svc Service) CreateProfile(req profile.Profile) (*profile.Profile, error) 
 	}
 	if result != nil {
 		return nil, nil
-	}
-	newProfile := profile.Profile{
-		UserId:      req.UserId,
-		Name:        req.Name,
-		Gender:      req.Gender,
-		DateOfBirth: req.DateOfBirth,
-		Height:      req.Height,
-		Weight:      req.Weight,
-	}
-	err = svc.repo.CreateProfile(newProfile)
-	if err != nil {
-		err = errors.Wrap(err, "repo: create profile")
-		return nil, err
+	} else {
+		newProfile := profile.Profile{}
+		newProfile.UserId = req.UserId
+		if req.Name != "" {
+			newProfile.Name = req.Name
+		}
+		if req.Height != 0 {
+			newProfile.Height = req.Height
+		}
+		if req.Weight != 0 {
+			newProfile.Weight = req.Weight
+		}
+		if req.Gender != "" {
+			newProfile.Gender = req.Gender
+		}
+		if !req.DateOfBirth.Equal(time.Time{}) {
+			newProfile.DateOfBirth = req.DateOfBirth
+		}
+		err = svc.repo.CreateProfile(newProfile)
+		if err != nil {
+			err = errors.Wrap(err, "repo: create profile")
+			return nil, err
+		}
+
+		return &newProfile, nil
 	}
 
-	return &newProfile, nil
 }
 
 func (svc Service) UpdateProfile(req profile.Profile) (*profile.Profile, error) {
@@ -84,37 +95,39 @@ func (svc Service) UpdateProfile(req profile.Profile) (*profile.Profile, error) 
 	}
 	if result == nil {
 		return nil, nil
-	}
-	newProfile := result
-	if req.Name != "" {
-		newProfile.Name = req.Name
-	}
-	if !req.DateOfBirth.Equal(time.Time{}) {
-		newProfile.DateOfBirth = req.DateOfBirth
-	}
+	} else {
+		newProfile := result
+		if req.Name != "" {
+			newProfile.Name = req.Name
+		}
+		if !req.DateOfBirth.Equal(time.Time{}) {
+			newProfile.DateOfBirth = req.DateOfBirth
+		}
 
-	if req.Height != 0 {
-		newProfile.Height = req.Height
-	}
-	if req.Weight != 0 {
-		newProfile.Weight = req.Weight
-	}
-	if req.Gender != "" {
-		if req.Gender != constant.Lakilaki && req.Gender != constant.Perempuan {
-			err = errors.Wrap(err, "wrong gender value")
+		if req.Height != 0 {
+			newProfile.Height = req.Height
+		}
+		if req.Weight != 0 {
+			newProfile.Weight = req.Weight
+		}
+		if req.Gender != "" {
+			if req.Gender != constant.Lakilaki && req.Gender != constant.Perempuan {
+				err = errors.Wrap(err, "wrong gender value")
+				return nil, err
+			}
+			newProfile.Gender = req.Gender
+		}
+		newProfile.UpdatedAt = time.Now()
+
+		err = svc.repo.UpdateProfile(*newProfile)
+		if err != nil {
+			err = errors.Wrap(err, "repo: update profile")
 			return nil, err
 		}
-		newProfile.Gender = req.Gender
-	}
-	newProfile.UpdatedAt = time.Now()
 
-	err = svc.repo.UpdateProfile(*newProfile)
-	if err != nil {
-		err = errors.Wrap(err, "repo: update profile")
-		return nil, err
+		return newProfile, nil
 	}
 
-	return newProfile, nil
 }
 
 func (svc Service) DeleteProfile(id string) (*profile.Profile, error) {

@@ -610,10 +610,12 @@ var doc = `{
             "type": "object",
             "properties": {
                 "dateOfBirth": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "YYYY-MM-DD"
                 },
                 "gender": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "LAKILAKI/PEREMPUAN"
                 },
                 "height": {
                     "type": "integer"
