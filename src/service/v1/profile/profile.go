@@ -3,6 +3,8 @@ package profile
 import (
 	"backend/src/constant"
 	"backend/src/entity/v1/db/profile"
+	profileDto "backend/src/entity/v1/http/profile"
+	"fmt"
 	"time"
 
 	// dbProfile "ta/backend/src/entity/v1/db/profile"
@@ -23,17 +25,17 @@ func NewService(repo profileRepo.Repositorier) *Service {
 }
 
 type Servicer interface {
-	GetProfile(id string) (*profile.Profile, error)
+	GetProfile(id string) (*profileDto.ProfileDto, error)
 	CreateProfile(req profile.Profile) (*profile.Profile, error)
 	UpdateProfile(req profile.Profile) (*profile.Profile, error)
-	DeleteProfile(id string) (*profile.Profile, error)
+	DeleteProfile(id string) (*profileDto.ProfileDto, error)
 	ConvertStringToTime(dateString string) (time.Time, error)
 }
 
 // func (svc Service) ExtractToken(token string) (res profile.CommonRequest, err error) {
 // }
 
-func (svc Service) GetProfile(id string) (*profile.Profile, error) {
+func (svc Service) GetProfile(id string) (*profileDto.ProfileDto, error) {
 	var err error
 	result := profile.Profile{}
 	result, err = svc.repo.GetProfile(id)
@@ -44,8 +46,18 @@ func (svc Service) GetProfile(id string) (*profile.Profile, error) {
 	if result.CreatedAt.Equal(time.Time{}) {
 		return nil, nil
 	}
+	response := &profileDto.ProfileDto{
+		UserId:      result.UserId,
+		Name:        result.Name,
+		Gender:      result.Gender,
+		DateOfBirth: result.DateOfBirth.Local().Format("2006-01-02"),
+		Height:      result.Height,
+		Weight:      result.Weight,
+		CreatedAt:   result.CreatedAt,
+		UpdatedAt:   result.UpdatedAt,
+	}
 
-	return &result, nil
+	return response, nil
 }
 
 func (svc Service) CreateProfile(req profile.Profile) (*profile.Profile, error) {
@@ -96,7 +108,23 @@ func (svc Service) UpdateProfile(req profile.Profile) (*profile.Profile, error) 
 	if result == nil {
 		return nil, nil
 	} else {
-		newProfile := result
+		// Parse the string into a time.Time value
+		t, err := time.Parse("2006-01-02", result.DateOfBirth)
+		if err != nil {
+			fmt.Println("Error parsing date:", err)
+			err = errors.Wrap(err, "Error parsing date:")
+			return nil, err
+		}
+		newProfile := &profile.Profile{
+			UserId:      result.UserId,
+			Name:        result.Name,
+			Gender:      result.Gender,
+			DateOfBirth: t,
+			Height:      result.Height,
+			Weight:      result.Weight,
+			CreatedAt:   result.CreatedAt,
+			UpdatedAt:   result.UpdatedAt,
+		}
 		if req.Name != "" {
 			newProfile.Name = req.Name
 		}
@@ -130,7 +158,7 @@ func (svc Service) UpdateProfile(req profile.Profile) (*profile.Profile, error) 
 
 }
 
-func (svc Service) DeleteProfile(id string) (*profile.Profile, error) {
+func (svc Service) DeleteProfile(id string) (*profileDto.ProfileDto, error) {
 	var err error
 	result, err := svc.GetProfile(id)
 	if err != nil {
@@ -147,7 +175,7 @@ func (svc Service) DeleteProfile(id string) (*profile.Profile, error) {
 		return nil, err
 	}
 
-	return &profile.Profile{
+	return &profileDto.ProfileDto{
 		UserId:      id,
 		Name:        result.Name,
 		Gender:      result.Gender,
