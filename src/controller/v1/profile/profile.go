@@ -37,28 +37,24 @@ func NewController(svc profile.Servicer) *Controller {
 func (ctrl Controller) GetProfile(ctx *gin.Context) {
 	token, err := helper.GetJWT(ctx)
 	if errors.Is(err, constant.ErrTokenNotFound) || errors.Is(err, constant.ErrInvalidFormat) {
-		log.Println(err)
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	claims, err := helper.ExtractJWT(token)
 	if errors.Is(err, jwt.ErrSignatureInvalid) || errors.Is(err, constant.ErrTokenInvalid) {
-		log.Println(err)
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	decryptedId, err := helper.Decrypt(claims.UserID)
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	}
 	res, err := ctrl.svc.GetProfile(decryptedId)
-	log.Println(res.Name)
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	} else {
-		log.Println(res.Name)
 		helper.JSONResponse(ctx, http.StatusOK, "", res)
 	}
 }
@@ -76,19 +72,19 @@ func (ctrl Controller) GetProfile(ctx *gin.Context) {
 func (ctrl Controller) CreateProfile(ctx *gin.Context) {
 	token, err := helper.GetJWT(ctx)
 	if errors.Is(err, constant.ErrTokenNotFound) || errors.Is(err, constant.ErrInvalidFormat) {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	claims, err := helper.ExtractJWT(token)
 	if errors.Is(err, jwt.ErrSignatureInvalid) || errors.Is(err, constant.ErrTokenInvalid) {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	var request profileDto.CreateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusBadRequest, "Invalid request body", nil)
 		return
 	}
@@ -98,14 +94,14 @@ func (ctrl Controller) CreateProfile(ctx *gin.Context) {
 	} else {
 		dateTime, err = ctrl.svc.ConvertStringToTime(request.DateOfBirth)
 		if err != nil {
-			log.Println(err)
+
 			helper.JSONResponse(ctx, http.StatusInternalServerError, "failed to parse datestring to datetime", nil)
 			return
 		}
 	}
 	decryptedId, err := helper.Decrypt(claims.UserID)
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	}
 	res, err := ctrl.svc.CreateProfile(profileModel.Profile{
@@ -117,7 +113,7 @@ func (ctrl Controller) CreateProfile(ctx *gin.Context) {
 		Weight:      request.Weight,
 	})
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	}
 	if err == nil && res != nil {
@@ -142,19 +138,19 @@ func (ctrl Controller) CreateProfile(ctx *gin.Context) {
 func (ctrl Controller) UpdateProfile(ctx *gin.Context) {
 	token, err := helper.GetJWT(ctx)
 	if errors.Is(err, constant.ErrTokenNotFound) || errors.Is(err, constant.ErrInvalidFormat) {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	claims, err := helper.ExtractJWT(token)
 	if errors.Is(err, jwt.ErrSignatureInvalid) || errors.Is(err, constant.ErrTokenInvalid) {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	var request profileDto.UpdateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusBadRequest, "Invalid request body", nil)
 		return
 	}
@@ -164,14 +160,14 @@ func (ctrl Controller) UpdateProfile(ctx *gin.Context) {
 	} else {
 		dateTime, err = ctrl.svc.ConvertStringToTime(request.DateOfBirth)
 		if err != nil {
-			log.Println(err)
+
 			helper.JSONResponse(ctx, http.StatusInternalServerError, "failed to parse datestring to datetime", nil)
 			return
 		}
 	}
 	decryptedId, err := helper.Decrypt(claims.UserID)
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	}
 
@@ -184,7 +180,7 @@ func (ctrl Controller) UpdateProfile(ctx *gin.Context) {
 		Weight:      request.Weight,
 	})
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	}
 	if err == nil && res != nil {
@@ -208,28 +204,28 @@ func (ctrl Controller) UpdateProfile(ctx *gin.Context) {
 func (ctrl Controller) DeleteProfile(ctx *gin.Context) {
 	token, err := helper.GetJWT(ctx)
 	if errors.Is(err, constant.ErrTokenNotFound) || errors.Is(err, constant.ErrInvalidFormat) {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	claims, err := helper.ExtractJWT(token)
 	if errors.Is(err, jwt.ErrSignatureInvalid) || errors.Is(err, constant.ErrTokenInvalid) {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
 	decryptedId, err := helper.Decrypt(claims.UserID)
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	}
 
 	res, err := ctrl.svc.DeleteProfile(decryptedId)
 	if err != nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
 	} else if err == nil && res == nil {
-		log.Println(err)
+
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.New("Profile Didnt Exist").Error(), nil)
 	} else if err == nil && res != nil {
 		log.Println(res.Name)
