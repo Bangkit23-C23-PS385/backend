@@ -68,8 +68,10 @@ definitions:
   profile.UpdateRequest:
     properties:
       dateOfBirth:
+        example: YYYY-MM-DD
         type: string
       gender:
+        example: LAKILAKI/PEREMPUAN
         type: string
       height:
         type: integer

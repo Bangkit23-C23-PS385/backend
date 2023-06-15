@@ -3,6 +3,7 @@ package profile
 import (
 	db "backend/src/database"
 	dbProfile "backend/src/entity/v1/db/profile"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -67,13 +68,16 @@ func (repo Repository) UpdateProfile(req dbProfile.Profile) (err error) {
 }
 
 func (repo Repository) DeleteProfile(id string) (err error) {
-	query := repo.master.Model(&dbProfile.Profile{}).Begin().Delete(&dbProfile.Profile{}, id)
-	err = query.Error
-	if err != nil {
-		query.Rollback()
-		return
+
+	// instance := repo.master.Model(dbProfile.Profile{})
+	instance := repo.master.Model(dbProfile.Profile{UserId: id})
+	result := instance.Delete(dbProfile.Profile{UserId: id})
+	log.Println(result)
+
+	if result.Error != nil {
+		log.Println("failed to delete profile with id:" + id + " and error: " + result.Error.Error())
+		return result.Error
 	}
-	err = query.Commit().Error
 
 	return
 }

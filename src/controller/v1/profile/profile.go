@@ -88,11 +88,16 @@ func (ctrl Controller) CreateProfile(ctx *gin.Context) {
 		helper.JSONResponse(ctx, http.StatusBadRequest, "Invalid request body", nil)
 		return
 	}
-	dateTime, err := ctrl.svc.ConvertStringToTime(request.DateOfBirth)
-	if err != nil {
-		log.Println(err)
-		helper.JSONResponse(ctx, http.StatusInternalServerError, "failed to parse datestring to datetime", nil)
-		return
+	dateTime := time.Time{}
+	if request.DateOfBirth == "YYYY-MM-DD" || request.DateOfBirth == "" {
+		dateTime = time.Time{}
+	} else {
+		dateTime, err = ctrl.svc.ConvertStringToTime(request.DateOfBirth)
+		if err != nil {
+			log.Println(err)
+			helper.JSONResponse(ctx, http.StatusInternalServerError, "failed to parse datestring to datetime", nil)
+			return
+		}
 	}
 	res, err := ctrl.svc.CreateProfile(profileModel.Profile{
 		UserId:      claims.UserID,
@@ -204,7 +209,10 @@ func (ctrl Controller) DeleteProfile(ctx *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
-	} else {
+	} else if err == nil && res == nil {
+		log.Println(err)
+		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.New("Profile Didnt Exist").Error(), nil)
+	} else if err == nil && res != nil {
 		log.Println(res.Name)
 		helper.JSONResponse(ctx, http.StatusOK, "", res)
 	}
