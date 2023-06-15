@@ -31,7 +31,7 @@ func Register() string {
             font-size: 1.2rem;
             font-weight: 400;
             font-family: 'Arial';">
-            Kamu baru saja melakukan registrasi di AIVue. Klik tombol di bawah untuk memverifikasi email kamu!
+            Kamu baru saja melakukan registrasi di MediCare. Klik tombol di bawah untuk memverifikasi email kamu!
         </p><br/><br/>
         <a href="{{.link}}" 
             target="_blank" 
