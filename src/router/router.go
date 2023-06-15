@@ -40,8 +40,8 @@ func initMaster() {
 func initSwagger(router *gin.Engine) {
 	_ = godotenv.Load()
 
-	docs.SwaggerInfo.Title = "Medicure API"
-	docs.SwaggerInfo.Description = "Medicure API Documentation"
+	docs.SwaggerInfo.Title = "MediCare API"
+	docs.SwaggerInfo.Description = "MediCare API Documentation"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = os.Getenv("API_ORIGIN_URL")
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
