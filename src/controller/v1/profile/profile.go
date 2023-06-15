@@ -209,7 +209,10 @@ func (ctrl Controller) DeleteProfile(ctx *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
-	} else {
+	} else if err == nil && res == nil {
+		log.Println(err)
+		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.New("Profile Didnt Exist").Error(), nil)
+	} else if err == nil && res != nil {
 		log.Println(res.Name)
 		helper.JSONResponse(ctx, http.StatusOK, "", res)
 	}
