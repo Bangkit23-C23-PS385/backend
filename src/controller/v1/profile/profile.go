@@ -47,8 +47,12 @@ func (ctrl Controller) GetProfile(ctx *gin.Context) {
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
-
-	res, err := ctrl.svc.GetProfile(claims.UserID)
+	decryptedId, err := helper.Decrypt(claims.UserID)
+	if err != nil {
+		log.Println(err)
+		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
+	}
+	res, err := ctrl.svc.GetProfile(decryptedId)
 	log.Println(res.Name)
 	if err != nil {
 		log.Println(err)
@@ -99,8 +103,13 @@ func (ctrl Controller) CreateProfile(ctx *gin.Context) {
 			return
 		}
 	}
+	decryptedId, err := helper.Decrypt(claims.UserID)
+	if err != nil {
+		log.Println(err)
+		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
+	}
 	res, err := ctrl.svc.CreateProfile(profileModel.Profile{
-		UserId:      claims.UserID,
+		UserId:      decryptedId,
 		Name:        claims.UserName,
 		Gender:      request.Gender,
 		DateOfBirth: dateTime,
@@ -160,9 +169,14 @@ func (ctrl Controller) UpdateProfile(ctx *gin.Context) {
 			return
 		}
 	}
+	decryptedId, err := helper.Decrypt(claims.UserID)
+	if err != nil {
+		log.Println(err)
+		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
+	}
 
 	res, err := ctrl.svc.UpdateProfile(profileModel.Profile{
-		UserId:      claims.UserID,
+		UserId:      decryptedId,
 		Name:        request.Name,
 		Gender:      request.Gender,
 		DateOfBirth: dateTime,
@@ -204,8 +218,13 @@ func (ctrl Controller) DeleteProfile(ctx *gin.Context) {
 		helper.JSONResponse(ctx, http.StatusUnauthorized, errors.Cause(err).Error(), nil)
 		return
 	}
+	decryptedId, err := helper.Decrypt(claims.UserID)
+	if err != nil {
+		log.Println(err)
+		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
+	}
 
-	res, err := ctrl.svc.DeleteProfile(claims.UserID)
+	res, err := ctrl.svc.DeleteProfile(decryptedId)
 	if err != nil {
 		log.Println(err)
 		helper.JSONResponse(ctx, http.StatusInternalServerError, errors.Cause(err).Error(), nil)
