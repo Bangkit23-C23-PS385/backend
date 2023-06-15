@@ -19,10 +19,18 @@ func NewRepository(db db.DB) *Repository {
 
 type Repositorier interface {
 	GetSymptoms() (entities []dbPredict.Symptoms, err error)
+	GetDiseaseDetail(diseaseEN string) (entity dbPredict.Disease, err error)
 }
 
 func (repo Repository) GetSymptoms() (entities []dbPredict.Symptoms, err error) {
 	query := repo.master.Find(&entities)
+	err = query.Error
+
+	return
+}
+
+func (repo Repository) GetDiseaseDetail(diseaseEN string) (entity dbPredict.Disease, err error) {
+	query := repo.master.Where("disease_en = ?", diseaseEN).Take(&entity)
 	err = query.Error
 
 	return

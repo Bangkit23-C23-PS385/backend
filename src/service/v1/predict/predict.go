@@ -50,6 +50,9 @@ func (svc Service) GetSymptoms() (resps httpPredict.SymptomsResponse, err error)
 
 func (svc Service) SubmitData(req httpPredict.PredictSymptoms) (resp httpPredict.DiseaseResponse, err error) {
 	data, _ := json.Marshal(req)
+	predictedDisease := struct {
+		Disease string `json:"disease"`
+	}{}
 
 	cctx, cancel := context.WithCancel(context.Background())
 	client, err := pubsub.NewClient(cctx, constant.GCPProjectID)
@@ -75,9 +78,23 @@ func (svc Service) SubmitData(req httpPredict.PredictSymptoms) (resp httpPredict
 	_ = subscription.Receive(cctx, func(ctx context.Context, msg *pubsub.Message) {
 		msg.Ack()
 		fmt.Printf("Received message: %s\n", string(msg.Data))
-		_ = json.Unmarshal(msg.Data, &resp)
+		_ = json.Unmarshal(msg.Data, &predictedDisease)
 		cancel()
 	})
+
+	diseaseEntity, err := svc.repo.GetDiseaseDetail(predictedDisease.Disease)
+	if err != nil {
+		err = errors.Wrap(err, "repo: get disease detail")
+		return
+	}
+	resp = httpPredict.DiseaseResponse{
+		Disease:     diseaseEntity.DiseaseID,
+		Description: diseaseEntity.Description,
+		Precaution1: diseaseEntity.Precaution1,
+		Precaution2: diseaseEntity.Precaution2,
+		Precaution3: diseaseEntity.Precaution3,
+		Precaution4: diseaseEntity.Precaution4,
+	}
 
 	return
 }
