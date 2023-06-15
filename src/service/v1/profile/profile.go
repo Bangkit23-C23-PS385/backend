@@ -27,7 +27,7 @@ func NewService(repo profileRepo.Repositorier) *Service {
 type Servicer interface {
 	GetProfile(id string) (*profileDto.ProfileDto, error)
 	CreateProfile(req profile.Profile) (*profile.Profile, error)
-	UpdateProfile(req profile.Profile) (*profile.Profile, error)
+	UpdateProfile(req profile.Profile) (*profileDto.ProfileDto, error)
 	DeleteProfile(id string) (*profileDto.ProfileDto, error)
 	ConvertStringToTime(dateString string) (time.Time, error)
 }
@@ -98,7 +98,7 @@ func (svc Service) CreateProfile(req profile.Profile) (*profile.Profile, error) 
 
 }
 
-func (svc Service) UpdateProfile(req profile.Profile) (*profile.Profile, error) {
+func (svc Service) UpdateProfile(req profile.Profile) (*profileDto.ProfileDto, error) {
 	var err error
 	result, err := svc.GetProfile(req.UserId)
 	if err != nil {
@@ -153,7 +153,16 @@ func (svc Service) UpdateProfile(req profile.Profile) (*profile.Profile, error) 
 			return nil, err
 		}
 
-		return newProfile, nil
+		return &profileDto.ProfileDto{
+			UserId:      result.UserId,
+			Name:        result.Name,
+			Gender:      result.Gender,
+			DateOfBirth: newProfile.DateOfBirth.Local().Format("2006-01-02"),
+			Height:      result.Height,
+			Weight:      result.Weight,
+			CreatedAt:   result.CreatedAt,
+			UpdatedAt:   result.UpdatedAt,
+		}, nil
 	}
 
 }
