@@ -259,7 +259,7 @@ func (svc Service) Resend(req httpAuth.ResendRequest) (err error) {
 	}
 
 	// send verification email to user
-	link := fmt.Sprintf("http://%v/v1/verify?username=%v&token=%v", constant.APIOriginURL, userEntity.Username, verifToken)
+	link := fmt.Sprintf("https://%v/v1/verify?username=%v&token=%v", constant.APIOriginURL, userEntity.Username, verifToken)
 	data := map[string]interface{}{
 		"name": userEntity.Username,
 		"link": link,
