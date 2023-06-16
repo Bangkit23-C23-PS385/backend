@@ -8,7 +8,7 @@ import (
 var (
 	ErrInvalidFormat          = errors.New("invalid format")
 	ErrAccountNotFound        = errors.New("account not found")
-	ErrAccountNotVerified     = errors.New("account not verfied")
+	ErrAccountNotVerified     = errors.New("account not verified")
 	ErrAccountAlreadyVerified = errors.New("account already verified")
 	ErrInvalidCreds           = errors.New("invalid credentials")
 
