@@ -169,7 +169,7 @@ func (svc Service) Register(req httpAuth.RegisterRequest) (err error) {
 	}
 
 	// send verification email to user
-	link := fmt.Sprintf("http://%v/v1/verify?username=%v&token=%v", constant.APIOriginURL, req.Username, verifToken)
+	link := fmt.Sprintf("https://%v/v1/verify?username=%v&token=%v", constant.APIOriginURL, req.Username, verifToken)
 	data := map[string]interface{}{
 		"name": req.Username,
 		"link": link,
